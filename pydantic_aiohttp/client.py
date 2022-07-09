@@ -18,7 +18,7 @@ from .errors import (
     ResponseParseError,
     errors_classes,
 )
-from .utils import chunk_file_reader
+from .utils import read_file_by_chunk
 
 StrIntMapping = dict[str, Union[str, int]]
 HttpEncodableMapping = dict[str, Union[str, int, list[Union[str, int]]]]
@@ -167,7 +167,7 @@ class Client:
             headers=headers,
             cookies=cookies,
             params=params,
-            data=chunk_file_reader(file),
+            data=read_file_by_chunk(file),
             response_model=response_model,
             timeout=timeout,
             error_response_models=error_response_models,
