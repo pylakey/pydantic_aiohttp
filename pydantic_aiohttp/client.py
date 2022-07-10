@@ -18,7 +18,10 @@ from .errors import (
     ResponseParseError,
     errors_classes,
 )
-from .utils import read_file_by_chunk
+from .utils import (
+    model_to_dict,
+    read_file_by_chunk,
+)
 
 StrIntMapping = dict[str, Union[str, int]]
 HttpEncodableMapping = dict[str, Union[str, int, list[Union[str, int]]]]
@@ -42,15 +45,12 @@ class Client:
             bearer_token: Union[str, pydantic.SecretStr] = None
     ):
         self.logger = logging.getLogger("pydantic_aiohttp.Client")
-        headers = headers.dict(exclude_unset=True) if isinstance(headers, pydantic.BaseModel) else headers
-        cookies = cookies.dict(exclude_unset=True) if isinstance(cookies, pydantic.BaseModel) else cookies
+        headers = model_to_dict(headers)
+        cookies = model_to_dict(cookies)
 
         if bearer_token is not None:
             if isinstance(bearer_token, pydantic.SecretStr):
                 bearer_token = bearer_token.get_secret_value()
-
-            if headers is None:
-                headers = {}
 
             headers["Authorization"] = f"Bearer {bearer_token}"
 
@@ -76,19 +76,15 @@ class Client:
             timeout: int = 300,  # Default in aiohttp
             error_response_models: ErrorResponseModels = None
     ) -> Optional[Response]:
-        headers = headers.dict(exclude_unset=True) if isinstance(headers, pydantic.BaseModel) else headers
-        cookies = cookies.dict(exclude_unset=True) if isinstance(cookies, pydantic.BaseModel) else cookies
-        params = params.dict(exclude_unset=True) if isinstance(params, pydantic.BaseModel) else params
-        body = body.dict(exclude_unset=True) if isinstance(body, pydantic.BaseModel) else body
         error_response_models = self._error_response_models | (error_response_models or {})
 
         async with self._session.request(
                 method,
                 path,
-                headers=headers,
-                cookies=cookies,
-                params=params,
-                json=body,
+                headers=model_to_dict(headers),
+                cookies=model_to_dict(cookies),
+                params=model_to_dict(params),
+                json=model_to_dict(body),
                 data=data,
                 timeout=aiohttp.ClientTimeout(total=timeout)
         ) as response:
@@ -130,10 +126,6 @@ class Client:
             timeout: int = 300,  # Default in aiohttp
             error_response_models: ErrorResponseModels = None
     ) -> Optional[Response]:
-        headers = headers.dict(exclude_unset=True) if isinstance(headers, pydantic.BaseModel) else headers
-        cookies = cookies.dict(exclude_unset=True) if isinstance(cookies, pydantic.BaseModel) else cookies
-        params = params.dict(exclude_unset=True) if isinstance(params, pydantic.BaseModel) else params
-
         return await self.post(
             path,
             headers=headers,
@@ -158,10 +150,6 @@ class Client:
             timeout: int = 300,  # Default in aiohttp
             error_response_models: ErrorResponseModels = None
     ) -> Optional[Response]:
-        headers = headers.dict(exclude_unset=True) if isinstance(headers, pydantic.BaseModel) else headers
-        cookies = cookies.dict(exclude_unset=True) if isinstance(cookies, pydantic.BaseModel) else cookies
-        params = params.dict(exclude_unset=True) if isinstance(params, pydantic.BaseModel) else params
-
         return await self.post(
             path,
             headers=headers,

@@ -1,7 +1,11 @@
 from os import PathLike
-from typing import Union
+from typing import (
+    Optional,
+    Union,
+)
 
 import aiofiles
+import pydantic
 
 DEFAULT_CHUNK_SIZE = 64 * 1024
 
@@ -13,3 +17,13 @@ async def read_file_by_chunk(file: Union[str, PathLike[str]], chunk_size: int = 
         while chunk:
             yield chunk
             chunk = await f.read(chunk_size)
+
+
+def model_to_dict(model: Union[dict, pydantic.BaseModel]) -> Optional[dict]:
+    if isinstance(model, pydantic.BaseModel):
+        return model.dict(exclude_unset=True)
+
+    if isinstance(model, dict):
+        return model
+
+    return None

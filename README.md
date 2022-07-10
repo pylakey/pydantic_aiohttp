@@ -4,7 +4,7 @@
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/pydantic_aiohttp.svg)](https://pypi.python.org/pypi/pydantic_aiohttp/)
 [![PyPI license](https://img.shields.io/pypi/l/pydantic_aiohttp.svg)](https://pypi.python.org/pypi/pydantic_aiohttp/)
 
-This repository provides simple HTTP Client based on aiohttp with integration of pydantic 
+This repository provides simple HTTP Client based on aiohttp with integration of pydantic
 
 ## Examples
 
@@ -40,6 +40,7 @@ if __name__ == '__main__':
 ### Handling errors parsed as pydantic models
 
 ```python
+import http
 import asyncio
 
 import pydantic
@@ -70,7 +71,7 @@ async def main():
     client = Client(
         "https://fastapi.example.com",
         error_response_models={
-            pydantic_aiohttp.status.HTTP_422_UNPROCESSABLE_ENTITY: FastAPIUnprocessableEntityError
+            http.HTTPStatus.UNPROCESSABLE_ENTITY: FastAPIUnprocessableEntityError
         }
     )
 
@@ -96,8 +97,8 @@ async def main():
         #     "msg": "field required",
         #     "type": "value_error.missing"
         # }
-
-    await client.close()
+    finally:
+        await client.close()
 
 
 if __name__ == '__main__':
