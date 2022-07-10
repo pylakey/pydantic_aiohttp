@@ -119,12 +119,13 @@ class Client:
             path: str,
             file: aiohttp.typedefs.PathLike,
             *,
+            filename: str = 'file',
             headers: Headers = None,
             cookies: Cookies = None,
             params: Params = None,
             response_model: Type[Response] = None,
             timeout: int = 300,  # Default in aiohttp
-            error_response_models: ErrorResponseModels = None
+            error_response_models: ErrorResponseModels = None,
     ) -> Optional[Response]:
         return await self.post(
             path,
@@ -132,7 +133,7 @@ class Client:
             cookies=cookies,
             params=params,
             # TODO: aiofiles?
-            data={'file': open(file, 'rb')},
+            data={filename: open(file, 'rb')},
             response_model=response_model,
             timeout=timeout,
             error_response_models=error_response_models,

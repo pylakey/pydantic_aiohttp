@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.2.1
+
+### Update
+
+Allow to set custom filename in `Client.upload_file`
+
 ## 0.2.0
 
 ### Breaking
