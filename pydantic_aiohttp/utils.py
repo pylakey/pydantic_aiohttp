@@ -7,10 +7,11 @@ from typing import (
 import aiofiles
 import pydantic
 
-DEFAULT_CHUNK_SIZE = 64 * 1024
+DEFAULT_DOWNLOAD_CHUNK_SIZE = 64 * 1024  # 128KB
+DEFAULT_UPLOAD_CHUNK_SIZE = 64 * 1024  # 64KB
 
 
-async def read_file_by_chunk(file: Union[str, PathLike[str]], chunk_size: int = DEFAULT_CHUNK_SIZE):
+async def read_file_by_chunk(file: Union[str, PathLike[str]], chunk_size: int = DEFAULT_UPLOAD_CHUNK_SIZE):
     async with aiofiles.open(file, 'rb') as f:
         chunk = await f.read(chunk_size)
 
