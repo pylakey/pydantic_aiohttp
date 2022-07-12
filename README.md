@@ -106,6 +106,27 @@ if __name__ == '__main__':
 
 ```
 
+### Downloading files
+```python
+import asyncio
+
+from pydantic_aiohttp import Client
+
+
+async def main():
+    client = Client('https://source.unsplash.com')
+
+    try:
+        await client.download_file("/random", filepath="random.jpg")
+    finally:
+        await client.close()
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
+
+```
+
 ## LICENSE
 
 This project is licensed under the terms of the [MIT](https://github.com/pylakey/aiotdlib/blob/master/LICENSE) license.
