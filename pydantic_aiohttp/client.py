@@ -47,8 +47,8 @@ class Client:
             bearer_token: Union[str, pydantic.SecretStr] = None
     ):
         self.logger = logging.getLogger("pydantic_aiohttp.Client")
-        headers = model_to_dict(headers)
-        cookies = model_to_dict(cookies)
+        headers = model_to_dict(headers) or {}
+        cookies = model_to_dict(cookies) or {}
 
         if bearer_token is not None:
             if isinstance(bearer_token, pydantic.SecretStr):

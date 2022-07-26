@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pydantic_aiohttp"
-version = "0.3.0"
+version = "0.3.1"
 description = "Simple HTTP Client based on aiohttp with integration of pydantic"
 authors = ["pylakey <pylakey@protonmail.com>"]
 license = "MIT"
