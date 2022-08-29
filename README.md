@@ -37,6 +37,33 @@ if __name__ == '__main__':
 
 ```
 
+### Use as context manager
+
+```python
+import asyncio
+
+import pydantic
+
+from pydantic_aiohttp import Client
+
+
+class HelloWorldResponse(pydantic.BaseModel):
+    hello: str
+
+
+async def main():
+    # Client will be closed automatically on exit from context
+    async with Client("https://api.example.com") as client:
+        response = await client.get("/hello", response_model=HelloWorldResponse)
+    
+    print(response.hello)
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
+
+```
+
 ### Handling errors parsed as pydantic models
 
 ```python
