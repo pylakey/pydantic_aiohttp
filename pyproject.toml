@@ -24,7 +24,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-aiofiles = "^0.8.0"
+aiofiles = ">=0.8,<22.2"
 aiohttp = { extras = ["speedups"], version = "^3.8.1" }
 pydantic = "^1.9.2"
 ujson = "^5.4.0"
