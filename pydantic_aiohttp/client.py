@@ -47,6 +47,7 @@ class Client:
             *,
             headers: Headers = None,
             cookies: Cookies = None,
+            params: Params = None,
             error_response_models: ErrorResponseModels = None,
             bearer_token: Union[str, pydantic.SecretStr] = None,
             response_class: Type[ResponseClass] = PydanticModelResponseClass,
@@ -65,6 +66,7 @@ class Client:
         self._error_response_models = error_response_models or {}
         self._response_class = response_class
         self._error_response_class = error_response_class
+        self._params = model_to_dict(params) or {}
         self._session = aiohttp.ClientSession(
             base_url,
             headers=headers,
@@ -188,12 +190,17 @@ class Client:
         if not bool(response_class):
             raise ValueError('response_class is not set')
 
+        _params = self._params
+
+        if bool(params):
+            _params.update(model_to_dict(params))
+
         async with self._session.request(
                 method,
                 path,
                 headers=model_to_dict(headers),
                 cookies=model_to_dict(cookies),
-                params=model_to_dict(params),
+                params=params,
                 json=model_to_dict(body),
                 data=data,
                 timeout=aiohttp.ClientTimeout(total=timeout)
