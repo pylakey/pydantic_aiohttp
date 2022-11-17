@@ -1,10 +1,17 @@
 # CHANGELOG
 
+## 0.4.0
+
+### Update
+
+Client response parsing customization
+
 ## 0.3.2
 
 ### Update
 
 * Client now can be used as context manager:
+
 ```python
 async with Client("https://api.example.com") as client:
     response = await client.get("/hello")

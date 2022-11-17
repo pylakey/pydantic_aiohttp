@@ -16,28 +16,51 @@ import asyncio
 import pydantic
 
 from pydantic_aiohttp import Client
+from pydantic_aiohttp.responses import (
+    JSONResponseClass,
+    PlainTextResponseClass,
+    PydanticModelResponseClass
+)
 
 
-class HelloWorldResponse(pydantic.BaseModel):
-    hello: str
+class Todo(pydantic.BaseModel):
+    userId: int
+    id: int
+    title: str
+    completed: bool
 
 
 async def main():
-    example_client = Client("https://api.example.com")
+    client = Client('https://jsonplaceholder.typicode.com')
 
-    response = await example_client.get("/hello", response_model=HelloWorldResponse)
-    print(response.hello)
+    async with client:
+        # Text response
+        todo = await client.get('/todos/1', response_class=PlainTextResponseClass)
+        print(isinstance(todo, str))  # True
 
-    # After all your work is done you should close client (this method closes aiohttp session instance)
-    await example_client.close()
+        # JSON Response
+        todo = await client.get('/todos/1', response_class=JSONResponseClass)
+        print(isinstance(todo, dict))  # True
+        # You can achieve the same result if you know exact shape of response, dict for example
+        todo = await client.get('/todos/1', response_class=PydanticModelResponseClass, response_model=dict)
+        print(isinstance(todo, dict))  # True
+
+        # Deserialization in pydantic model
+        todo = await client.get('/todos/1', response_class=PydanticModelResponseClass, response_model=Todo)
+        print(isinstance(todo, Todo))  # True
+
+        # PydanticModelResponseClass is used by default, so you can omit it
+        todo = await client.get('/todos/1', response_model=Todo)
+        print(isinstance(todo, Todo))  # True
 
 
 if __name__ == '__main__':
     asyncio.run(main())
 
+
 ```
 
-### Use as context manager
+### Explicitly close connection
 
 ```python
 import asyncio
@@ -46,17 +69,43 @@ import pydantic
 
 from pydantic_aiohttp import Client
 
-
-class HelloWorldResponse(pydantic.BaseModel):
-    hello: str
+class Todo(pydantic.BaseModel):
+    userId: int
+    id: int
+    title: str
+    completed: bool
 
 
 async def main():
-    # Client will be closed automatically on exit from context
-    async with Client("https://api.example.com") as client:
-        response = await client.get("/hello", response_model=HelloWorldResponse)
-    
-    print(response.hello)
+    client = Client('https://jsonplaceholder.typicode.com')
+
+    try:
+        await client.get('/todos/1', response_model=Todo)
+    finally:
+        # Don't forget to close client session after use
+        await client.close()
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
+
+```
+
+### Downloading files
+
+```python
+import asyncio
+import uuid
+
+from pydantic_aiohttp import Client
+
+
+async def main():
+    client = Client('https://source.unsplash.com')
+
+    async with client:
+        filepath = await client.download_file("/random", filepath=f"random_{uuid.uuid4()}.jpg")
+        print(filepath)
 
 
 if __name__ == '__main__':
@@ -124,27 +173,6 @@ async def main():
         #     "msg": "field required",
         #     "type": "value_error.missing"
         # }
-    finally:
-        await client.close()
-
-
-if __name__ == '__main__':
-    asyncio.run(main())
-
-```
-
-### Downloading files
-```python
-import asyncio
-
-from pydantic_aiohttp import Client
-
-
-async def main():
-    client = Client('https://source.unsplash.com')
-
-    try:
-        await client.download_file("/random", filepath="random.jpg")
     finally:
         await client.close()
 
