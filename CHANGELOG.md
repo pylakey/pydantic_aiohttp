@@ -2,25 +2,19 @@
 
 ## 0.5.0
 
-Removed content_type attribute in ResponseClass
+* Removed `content_type` attribute in ResponseClass
 
-Ignore content type in response.json() when parsing response
+* Ignore content type in `response.json()` when parsing response
 
 ## 0.4.1
 
-### Update
-
-Common params between all requests
+* Common params between all requests
 
 ## 0.4.0
 
-### Update
-
-Client response parsing customization
+* Client response parsing customization
 
 ## 0.3.2
-
-### Update
 
 * Client now can be used as context manager:
 
@@ -31,15 +25,11 @@ async with Client("https://api.example.com") as client:
 
 ## 0.3.1
 
-### Update
-
 * Fixed null pointer when bearer_token passed to Client
 
 * Bump JRubics/poetry-publish from 1.11 to 1.12 by @dependabot in #6
 
 ## 0.3.0
-
-### Update
 
 * base_url parameter of Client is optional now
 
@@ -49,8 +39,6 @@ async with Client("https://api.example.com") as client:
 
 ## 0.2.1
 
-### Update
-
 Allow to set custom filename in `Client.upload_file`
 
 ## 0.2.0
@@ -58,8 +46,6 @@ Allow to set custom filename in `Client.upload_file`
 ### Breaking
 
 Removed `status` module. Native Python `http.HTTPStatus` is used instead (#1)
-
-### Update
 
 Some code cleanups
 
