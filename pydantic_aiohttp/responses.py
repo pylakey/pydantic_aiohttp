@@ -62,7 +62,7 @@ class PydanticModelResponseClass(ResponseClass[PydanticModel]):
             content_type=None
         )
 
-        return pydantic.parse_raw_as(response_model, response_json)
+        return pydantic.parse_obj_as(response_model, response_json)
 
 
 class StreamResponseClass(ResponseClass[PathLike]):

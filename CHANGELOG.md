@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.5.1
+
+* Hotfixes
+
 ## 0.5.0
 
 * Removed `content_type` attribute in ResponseClass
