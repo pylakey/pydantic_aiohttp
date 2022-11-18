@@ -56,6 +56,7 @@ class Client:
         self.logger = logging.getLogger("pydantic_aiohttp.Client")
         headers = model_to_dict(headers) or {}
         cookies = model_to_dict(cookies) or {}
+        params = model_to_dict(params) or {}
 
         if bearer_token is not None:
             if isinstance(bearer_token, pydantic.SecretStr):
@@ -66,7 +67,7 @@ class Client:
         self._error_response_models = error_response_models or {}
         self._response_class = response_class
         self._error_response_class = error_response_class
-        self._params = model_to_dict(params) or {}
+        self._params = params
         self._session = aiohttp.ClientSession(
             base_url,
             headers=headers,
@@ -193,14 +194,14 @@ class Client:
         _params = self._params
 
         if bool(params):
-            _params.update(model_to_dict(params))
+            _params.update(model_to_dict(params) or {})
 
         async with self._session.request(
                 method,
                 path,
                 headers=model_to_dict(headers),
                 cookies=model_to_dict(cookies),
-                params=params,
+                params=_params,
                 json=model_to_dict(body),
                 data=data,
                 timeout=aiohttp.ClientTimeout(total=timeout)

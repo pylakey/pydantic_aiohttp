@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.5.0
+
+Removed content_type attribute in ResponseClass
+
+Ignore content type in response.json() when parsing response
+
+## 0.4.1
+
+### Update
+
+Common params between all requests
+
 ## 0.4.0
 
 ### Update
