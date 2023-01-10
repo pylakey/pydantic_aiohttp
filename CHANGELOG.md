@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.6.0
+
+* Using custom json requests serializer for better pydantic model serialization
+
+> Code of such json encoder was taken from https://github.com/tiangolo/fastapi. Thanks to @tiangolo for implementing it
+
 ## 0.5.1
 
 * Hotfixes

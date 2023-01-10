@@ -25,6 +25,7 @@ from .responses import (
 )
 from .utils import (
     DEFAULT_DOWNLOAD_CHUNK_SIZE,
+    json_serialize,
     model_to_dict,
     read_file_by_chunk,
 )
@@ -72,7 +73,7 @@ class Client:
             base_url,
             headers=headers,
             cookies=cookies,
-            json_serialize=ujson.dumps
+            json_serialize=json_serialize
         )
 
     async def _parse_response_error(

@@ -6,6 +6,9 @@ from typing import (
 
 import aiofiles
 import pydantic
+import ujson
+
+from pydantic_aiohttp.encoders import jsonable_encoder
 
 DEFAULT_DOWNLOAD_CHUNK_SIZE = 64 * 1024  # 128KB
 DEFAULT_UPLOAD_CHUNK_SIZE = 64 * 1024  # 64KB
@@ -28,3 +31,7 @@ def model_to_dict(model: Union[dict, pydantic.BaseModel]) -> Optional[dict]:
         return model
 
     return None
+
+
+def json_serialize(o, *args, **kwargs):
+    return ujson.dumps(jsonable_encoder(o), *args, **kwargs)
