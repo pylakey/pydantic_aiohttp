@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.6.1
+
+* Upgraded dependencies
+
 ## 0.6.0
 
 * Using custom json requests serializer for better pydantic model serialization
