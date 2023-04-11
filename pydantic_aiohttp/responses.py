@@ -14,7 +14,7 @@ import pydantic
 import ujson
 from aiohttp.typedefs import PathLike
 
-from pydantic_aiohttp.utils import DEFAULT_DOWNLOAD_CHUNK_SIZE
+from .utils import DEFAULT_DOWNLOAD_CHUNK_SIZE
 
 ResponseContentType = TypeVar('ResponseContentType')
 PydanticModel = TypeVar('PydanticModel')

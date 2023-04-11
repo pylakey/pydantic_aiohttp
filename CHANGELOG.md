@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.6.2
+
+* model_to_dict now accepts all pydantic.BaseModel.dict() parameters
+
+* utils module added to package export
+
+* encoders module added to package export
+
+* All absolute package path exports replaced with relative
+
 ## 0.6.1
 
 * Upgraded dependencies
