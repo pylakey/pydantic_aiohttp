@@ -3,7 +3,6 @@ from typing import (
     Any,
     Optional,
     Type,
-    TypeVar,
     Union,
 )
 
@@ -13,6 +12,7 @@ import ujson
 from aiohttp.typedefs import PathLike
 from ujson import JSONDecodeError
 
+from .encoders import url_compatible_encoder
 from .errors import (
     HTTPError,
     ResponseParseError,
@@ -23,22 +23,20 @@ from .responses import (
     ResponseClass,
     StreamResponseClass,
 )
+from .types import (
+    Body,
+    Cookies,
+    ErrorResponseModels,
+    Headers,
+    Params,
+    ResponseType,
+)
 from .utils import (
     DEFAULT_DOWNLOAD_CHUNK_SIZE,
     json_serialize,
     model_to_dict,
     read_file_by_chunk,
 )
-
-StrIntMapping = dict[str, Union[str, int]]
-HttpEncodableMapping = dict[str, Union[str, int, list[Union[str, int]]]]
-Params = Union[HttpEncodableMapping, pydantic.BaseModel]
-Cookies = Union[StrIntMapping, pydantic.BaseModel]
-Headers = Union[StrIntMapping, pydantic.BaseModel]
-Body = Union[dict[str, Any], pydantic.BaseModel]
-ErrorResponseModels = dict[int, Type[pydantic.BaseModel]]
-
-ResponseType = TypeVar('ResponseType')
 
 
 class Client:
@@ -52,7 +50,6 @@ class Client:
             error_response_models: ErrorResponseModels = None,
             bearer_token: Union[str, pydantic.SecretStr] = None,
             response_class: Type[ResponseClass] = PydanticModelResponseClass,
-            error_response_class: Type[ResponseClass] = PydanticModelResponseClass,
     ):
         self.logger = logging.getLogger("pydantic_aiohttp.Client")
         headers = model_to_dict(headers) or {}
@@ -67,7 +64,6 @@ class Client:
 
         self._error_response_models = error_response_models or {}
         self._response_class = response_class
-        self._error_response_class = error_response_class
         self._params = params
         self._session = aiohttp.ClientSession(
             base_url,
@@ -80,7 +76,6 @@ class Client:
             self,
             response: aiohttp.ClientResponse,
             error_response_models: ErrorResponseModels = None,
-            error_response_class: Type[ResponseClass] = PydanticModelResponseClass,
     ):
         error_response_models = self._error_response_models | (error_response_models or {})
         error_class = errors_classes.get(response.status, HTTPError)
@@ -200,9 +195,9 @@ class Client:
         async with self._session.request(
                 method,
                 path,
-                headers=model_to_dict(headers),
-                cookies=model_to_dict(cookies),
-                params=_params,
+                headers=url_compatible_encoder(model_to_dict(headers)),
+                cookies=url_compatible_encoder(model_to_dict(cookies)),
+                params=url_compatible_encoder(_params),
                 json=model_to_dict(body),
                 data=data,
                 timeout=aiohttp.ClientTimeout(total=timeout)

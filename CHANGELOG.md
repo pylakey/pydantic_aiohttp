@@ -1,12 +1,24 @@
 # CHANGELOG
 
+## 0.7.0
+
+### **BREAKING**
+
+* All types moved from `client` to separate `types` module
+
+* Removed unused `error_response_class` from `Client` constructur parameters
+
+___
+
+* Added custom `url_compatible_encoder` for params, cookies and headers because Aiohttp expects their values to be `int`, `float` or `str` instances
+
 ## 0.6.2
 
-* model_to_dict now accepts all pydantic.BaseModel.dict() parameters
+* `model_to_dict` now accepts all `pydantic.BaseModel.dict` parameters
 
-* utils module added to package export
+* `utils` module added to package export
 
-* encoders module added to package export
+* `encoders` module added to package export
 
 * All absolute package path exports replaced with relative
 
