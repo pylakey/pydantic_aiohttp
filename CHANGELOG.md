@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.7.1
+
+* Added new `RawResponseClass` which returns raw `aiohttp.ClientResponse` instance with no modification and parsing
+
 ## 0.7.0
 
 ### **BREAKING**

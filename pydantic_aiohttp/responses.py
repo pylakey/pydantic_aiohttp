@@ -78,3 +78,8 @@ class StreamResponseClass(ResponseClass[PathLike]):
                 await fd.write(chunk)
 
         return filepath
+
+
+class RawResponseClass(ResponseClass[aiohttp.ClientResponse]):
+    async def parse(self, *args, **kwargs) -> aiohttp.ClientResponse:
+        return self.aiohttp_response
