@@ -130,6 +130,7 @@ class Client:
             response_model: Type[ResponseType] = None,
             timeout: int = 300,  # Default in aiohttp
             error_response_models: ErrorResponseModels = None,
+            response_class: Type[ResponseClass] = None,
     ) -> Optional[ResponseType]:
         return await self.post(
             path,
@@ -141,6 +142,7 @@ class Client:
             response_model=response_model,
             timeout=timeout,
             error_response_models=error_response_models,
+            response_class=response_class
         )
 
     async def stream_file(
@@ -153,7 +155,8 @@ class Client:
             params: Params = None,
             response_model: Type[ResponseType] = None,
             timeout: int = 300,  # Default in aiohttp
-            error_response_models: ErrorResponseModels = None
+            error_response_models: ErrorResponseModels = None,
+            response_class: Type[ResponseClass] = None,
     ) -> Optional[ResponseType]:
         return await self.post(
             path,
@@ -164,6 +167,7 @@ class Client:
             response_model=response_model,
             timeout=timeout,
             error_response_models=error_response_models,
+            response_class=response_class
         )
 
     async def request(
