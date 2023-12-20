@@ -1,12 +1,10 @@
 import abc
 import logging
-from typing import (
-    Generic,
-    Optional,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import Generic
+from typing import Optional
+from typing import Type
+from typing import TypeVar
+from typing import Union
 
 import aiofiles
 import aiohttp.web_response
@@ -14,6 +12,7 @@ import pydantic
 import ujson
 from aiohttp.typedefs import PathLike
 
+from .types import EmptyResponse
 from .utils import DEFAULT_DOWNLOAD_CHUNK_SIZE
 
 ResponseContentType = TypeVar('ResponseContentType')
@@ -54,7 +53,8 @@ class JSONResponseClass(ResponseClass[Union[dict, list, str, None]]):
 class PydanticModelResponseClass(ResponseClass[PydanticModel]):
     async def parse(self, *args, response_model: Type[PydanticModel], **kwargs) -> PydanticModel:
         if response_model is None:
-            raise ValueError('response_model could not be None. If you need bare dict use JSONResponseClass instead')
+            return EmptyResponse()
+            # raise ValueError('response_model could not be None. If you need bare dict use JSONResponseClass instead')
 
         response_json = await self.aiohttp_response.json(
             encoding=self.charset,

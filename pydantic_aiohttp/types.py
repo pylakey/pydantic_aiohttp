@@ -1,9 +1,7 @@
-from typing import (
-    Any,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import Any
+from typing import Type
+from typing import TypeVar
+from typing import Union
 
 import pydantic
 
@@ -16,3 +14,7 @@ Body = Union[dict[str, Any], pydantic.BaseModel]
 ErrorResponseModels = dict[int, Type[pydantic.BaseModel]]
 
 ResponseType = TypeVar('ResponseType')
+
+
+class EmptyResponse(pydantic.BaseModel):
+    pass

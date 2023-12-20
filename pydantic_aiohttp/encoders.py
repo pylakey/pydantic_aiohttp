@@ -5,16 +5,14 @@ from collections import defaultdict
 from enum import Enum
 from pathlib import PurePath
 from types import GeneratorType
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    Optional,
-    Set,
-    Tuple,
-    Union,
-)
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Set
+from typing import Tuple
+from typing import Union
 
 from pydantic import BaseModel
 # noinspection PyProtectedMember

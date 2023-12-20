@@ -1,9 +1,7 @@
 import typing
 from os import PathLike
-from typing import (
-    Optional,
-    Union,
-)
+from typing import Optional
+from typing import Union
 
 import aiofiles
 import pydantic

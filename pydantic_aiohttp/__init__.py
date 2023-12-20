@@ -1,4 +1,5 @@
-__version__ = '0.7.1'
+__version__ = '0.8.0'
+__author__ = "pylakey <pylakey@protonmail.com>"
 
 from . import encoders
 from . import utils
