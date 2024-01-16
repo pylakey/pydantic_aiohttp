@@ -16,7 +16,6 @@ from .types import EmptyResponse
 from .utils import DEFAULT_DOWNLOAD_CHUNK_SIZE
 
 ResponseContentType = TypeVar('ResponseContentType')
-PydanticModel = TypeVar('PydanticModel')
 
 
 class ResponseClass(abc.ABC, Generic[ResponseContentType]):
@@ -31,6 +30,11 @@ class ResponseClass(abc.ABC, Generic[ResponseContentType]):
         return self.aiohttp_response.content
 
 
+class RawResponseClass(ResponseClass[aiohttp.ClientResponse]):
+    async def parse(self, *args, **kwargs) -> aiohttp.ClientResponse:
+        return self.aiohttp_response
+
+
 class NoneResponseClass(ResponseClass[None]):
     async def parse(self) -> None:
         return None
@@ -41,13 +45,20 @@ class PlainTextResponseClass(ResponseClass[str]):
         return await self.aiohttp_response.text(self.charset)
 
 
-class JSONResponseClass(ResponseClass[Union[dict, list, str, None]]):
-    async def parse(self, *args, **kwargs) -> Optional[ResponseContentType]:
+_JsonBaseFields = Union[str, int, float, bool, None]
+Json = Union[_JsonBaseFields, dict[str, _JsonBaseFields], list[_JsonBaseFields]]
+
+
+class JSONResponseClass(ResponseClass[Json]):
+    async def parse(self, *args, **kwargs) -> Optional[Json]:
         return await self.aiohttp_response.json(
             encoding=self.charset,
             loads=ujson.loads,
             content_type=None
         )
+
+
+PydanticModel = TypeVar('PydanticModel')
 
 
 class PydanticModelResponseClass(ResponseClass[PydanticModel]):
@@ -78,8 +89,3 @@ class StreamResponseClass(ResponseClass[PathLike]):
                 await fd.write(chunk)
 
         return filepath
-
-
-class RawResponseClass(ResponseClass[aiohttp.ClientResponse]):
-    async def parse(self, *args, **kwargs) -> aiohttp.ClientResponse:
-        return self.aiohttp_response

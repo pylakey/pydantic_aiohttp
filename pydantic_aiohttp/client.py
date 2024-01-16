@@ -2,6 +2,7 @@ import logging
 from typing import Any
 from typing import Optional
 from typing import Type
+from typing import TypeVar
 from typing import Union
 
 import aiohttp
@@ -22,11 +23,12 @@ from .types import Cookies
 from .types import ErrorResponseModels
 from .types import Headers
 from .types import Params
-from .types import ResponseType
 from .utils import DEFAULT_DOWNLOAD_CHUNK_SIZE
 from .utils import json_serialize
 from .utils import model_to_dict
 from .utils import read_file_by_chunk
+
+ResponseType = TypeVar('ResponseType')
 
 
 class Client:

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pydantic_aiohttp"
-version = "1.0.0"
+version = "1.0.1"
 description = "Simple HTTP Client based on aiohttp with integration of pydantic"
 authors = ["pylakey <pylakey@protonmail.com>"]
 license = "MIT"
@@ -25,7 +25,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.9"
 aiofiles = "^23.0.0"
-aiohttp = { extras = ["speedups"], version = "^3.8.1" }
+aiohttp = { version = "==3.*", extras = ["speedups"] }
 pydantic = ">=2"
 ujson = "^5.7.0"
 
