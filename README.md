@@ -163,7 +163,7 @@ async def main():
         )
     except pydantic_aiohttp.HTTPUnprocessableEntity as e:
         # response field of exception now contain parsed pydantic model entity 
-        print(e.response.detail[0].json(indent=4))
+        print(e.response.detail[0].model_dump_json(indent=4))
         # >>>
         # {
         #     "loc": [
