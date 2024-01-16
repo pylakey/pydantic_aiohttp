@@ -78,7 +78,8 @@ class Client:
             raise ResponseParseError(raw_response=response_text)
 
         if bool(error_response_model):
-            raise error_class(pydantic.parse_obj_as(error_response_model, response_json))
+            adapter = pydantic.TypeAdapter(error_response_model)
+            raise error_class(adapter.validate_python(response_json))
 
         raise error_class(response_json)
 
