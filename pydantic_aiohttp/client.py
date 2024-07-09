@@ -351,4 +351,5 @@ class Client:
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.close()
-        return self
+        if exc_val:
+            raise exc_val

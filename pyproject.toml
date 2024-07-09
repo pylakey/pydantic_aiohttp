@@ -1,19 +1,19 @@
-[tool.poetry]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
 name = "pydantic_aiohttp"
-version = "1.0.1"
+dynamic = ["version"]
 description = "Simple HTTP Client based on aiohttp with integration of pydantic"
-authors = ["pylakey <pylakey@protonmail.com>"]
-license = "MIT"
+authors = [
+    { name = "pylakey", email = "pylakey@protonmail.com" }
+]
+license = { file = "LICENSE" }
 readme = "README.md"
+requires-python = ">=3.9"
 homepage = "https://github.com/pylakey/pydantic_aiohttp"
 repository = "https://github.com/pylakey/pydantic_aiohttp"
-packages = [
-    { include = "pydantic_aiohttp" },
-]
-include = [
-    "README.md",
-    "CHANGELOG.md",
-]
 classifiers = [
     "Framework :: AsyncIO",
     "License :: OSI Approved :: MIT License",
@@ -21,17 +21,41 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
+dependencies = [
+    "aiofiles>=23.0.0",
+    "aiohttp[speedups]==3.*",
+    "pydantic>=2,<3",
+    "ujson>=5.7.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-aiofiles = "^23.0.0"
-aiohttp = { version = "==3.*", extras = ["speedups"] }
-pydantic = ">=2"
-ujson = "^5.7.0"
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.2,<8.0",
+]
 
-[tool.poetry.dev-dependencies]
-pytest = "^7.2"
+[project.urls]
+Source = "https://github.com/pylakey/pydantic_aiohttp"
+Homepage = "https://github.com/pylakey/pydantic_aiohttp"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.hatch.version]
+path = "pydantic_aiohttp/__init__.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build]
+skip-excluded-dirs = true
+include = [
+    "pydantic_aiohttp",
+    "README.md",
+    "CHANGELOG.md",
+]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "**/__pycache__",
+    "**/*.py[cod]"
+]
+
+[tool.hatch.build.targets.wheel]
+only-packages = true
